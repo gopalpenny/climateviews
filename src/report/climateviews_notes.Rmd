@@ -14,11 +14,22 @@ It's well documented that climate perceptions within the United States are influ
 * Climate perceptions vary across local scales in the US, according to a recent [paper in Nature Climate](https://www.nature.com/articles/nclimate2583) which published a large dataset on climate perceptions within the US.
 
 
-Things that I will do:
+Datasets that I will use
 
-* 
+* Download [YCOM](https://climatecommunication.yale.edu/visualizations-data/ycom-us/) -- Yale climate change perceptions database at the county level
+    + Survey questions (given to N = 12,061 participants) separated into categories:
+        + Beliefs
+        + Risk perceptions
+        + Policy support
+        + Behavior
+    + This database was compiled using multilevel regression + poststratification
+    + Each individual represented by a logit model accounting for demographics
+    + County-level poststratification was done using demographics, geography, and a couple of climate proxies such as 2008 Obama vote share, same-sex households, drivers who drive alone, and per capita carbon footprint
+* FEMA natural disasters database, [1953-2020](https://www.fema.gov/openfema-dataset-disaster-declarations-summaries-v1) (or, [data through 2013](https://www.fema.gov/data-sets) contains FIPS)
 * Scrape county-level FIPS codes from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697)
-* Scrape county fips codes
-*
+* Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this seems potentially unnecessary
+* [MIT elections data](https://electionlab.mit.edu/data), especially [this dataset from 2018](https://github.com/MEDSL/2018-elections-unoffical)
+
+Each of the datasets much be joined at the county level, which requires a minimal amount of cleaning and preparation (e.g., to remove unnecessary text in county ID fields). I will convert main dataset of climate perceptions (YCOM) to principle components, for each of the major subject areas of the survey.
 
 
