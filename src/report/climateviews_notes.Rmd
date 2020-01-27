@@ -3,6 +3,12 @@ title: "Climate risk and perceptions"
 output: html_notebook
 ---
 
+```{r}
+library(sf)
+library(tidyverse)
+library(viridis)
+```
+
 It's well documented that climate perceptions within the United States are influenced to a large degree by political ideology and party affiliation. For instance:
 
 * Full 2016 report from [PEW](https://www.pewresearch.org/science/2016/10/04/public-views-on-climate-change-and-climate-scientists/)
@@ -29,7 +35,23 @@ Datasets that I will use
 * Scrape county-level FIPS codes from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697)
 * Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this seems potentially unnecessary
 * [MIT elections data](https://electionlab.mit.edu/data), especially [this dataset from 2018](https://github.com/MEDSL/2018-elections-unoffical)
+* [US Drought Monitor](https://droughtmonitor.unl.edu/Data/DataDownload/ComprehensiveStatistics.aspx), and [API info](https://droughtmonitor.unl.edu/WebServiceInfo.aspx#comp)
+* [FEMA NFIP](https://www.fema.gov/media-library/assets/documents/180374)
 
 Each of the datasets much be joined at the county level, which requires a minimal amount of cleaning and preparation (e.g., to remove unnecessary text in county ID fields). I will convert main dataset of climate perceptions (YCOM) to principle components, for each of the major subject areas of the survey.
+
+```{r map,fig.width=10}
+us_counties <- sf::st_read("../../spatial/shp/us_counties/us_counties_laea.shp")
+us_counties <- us_counties %>% left_join(ycom_county %>% rename(fips=GEOID),by="fips")
+  
+
+# p <- plotly::ggplotly(
+p <- ggplot() + 
+  geom_sf(data=us_counties,aes(fill=human),color=NA) +
+  viridis::scale_fill_viridis("Percent of\npopulation") +
+  ggtitle("Is climate change climate change caused by humans?")
+  # )
+print(p)
+```
 
 
