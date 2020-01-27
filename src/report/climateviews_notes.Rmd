@@ -1,0 +1,24 @@
+---
+title: "Climate risk and perceptions"
+output: html_notebook
+---
+
+It's well documented that climate perceptions within the United States are influenced to a large degree by political ideology and party affiliation. For instance:
+
+* Full 2016 report from [PEW](https://www.pewresearch.org/science/2016/10/04/public-views-on-climate-change-and-climate-scientists/)
+* see [PEW climate perceptions USA](https://www.pewresearch.org/science/2019/11/25/u-s-public-views-on-climate-and-energy/)
+* Increasing climate awareness is occurring [mostly among democrats](https://www.pewresearch.org/fact-tank/2019/08/28/u-s-concern-about-climate-change-is-rising-but-mainly-among-democrats/)
+* Young republicans [want climate action](https://www.vox.com/2019/11/25/20981768/climate-change-pew-opinion-poll-republicans-ok-boomer)
+* [Kamark (Brookings), 2019](https://www.brookings.edu/research/the-challenging-politics-of-climate-change/)
+* [Gray et al., 2019](https://www.sciencedirect.com/science/article/pii/S2214629619301227).
+* Climate perceptions vary across local scales in the US, according to a recent [paper in Nature Climate](https://www.nature.com/articles/nclimate2583) which published a large dataset on climate perceptions within the US.
+
+
+Things that I will do:
+
+* 
+* Scrape county-level FIPS codes from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697)
+* Scrape county fips codes
+*
+
+
