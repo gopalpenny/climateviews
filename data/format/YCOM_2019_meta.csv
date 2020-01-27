@@ -1,0 +1,62 @@
+Group,topic,descrirption
+0,Statecode,Geographic abbreviation
+0,Statename,Geographic name
+0,TotalPop,Total population
+1,happening,Estimated percentage who think that global warming is happening
+1,happeningOppose,Estimated percentage who do not think that global warming is happening
+1,human,Estimated percentage who think that global warming is caused mostly by human activities
+1,humanOppose,Estimated percentage who think that global warming is caused mostly by natural changes in the environment
+1,consensus,Estimated percentage who believe that most scientists think global warming is happening
+1,consensusOppose,Estimated percentage who believe there is a lot of disagreement among scientists about whether or not global warming is happening
+1,affectweather,Estimated percentage who somewhat/strongly agree that global warming is affecting the weather in the United States
+1,affectweatherOppose,Estimated percentage who somewhat/strongly disagree that global warming is affecting the weather in the United States
+2,worried,Estimated percentage who are somewhat/very worried about global warming
+2,worriedOppose,Estimated percentage who are not very/not at all worried about global warming
+2,harmplants,Estimated percentage who think global warming will harm plants and animal species a moderate amount/a great deal
+2,harmplantsOppose,Estimated percentage who think global warming will harm plants and animal species not at all/only a little
+2,futuregen,Estimated percentage who think global warming will harm future generations a moderate amount/a great deal
+2,futuregenOppose,Estimated percentage who think global warming will harm future generations not at all/only a little
+2,devharm,Estimated percentage who think global warming will harm people in developing countries a moderate amount/a great deal
+2,devharmOppose,Estimated percentage who think global warming will harm people in developing countries not at all/only a little
+2,harmUS,Estimated percentage who think global warming will harm people in the US a moderate amount/a great deal
+2,harmUSOppose,Estimated percentage who think global warming will harm people in the US not at all/only a little
+2,personal,Estimated percentage who think global warming will harm them personally a moderate amount/a great deal
+2,personalOppose,Estimated percentage who think global warming will harm them personally not at all/only a little
+2,timing,Estimated percentage who think global warming will start to harm people in the United now/within 10 years
+2,timingOppose,"Estimated percentage who think global warming will start to harm people in the United in 25 years or longer, or never"
+3,fundrenewables,Estimated percentage who somewhat/strongly support funding research into renewable energy sources
+3,fundrenewablesOppose,Estimated percentage who somewhat/strongly oppose funding research into renewable energy sources
+3,regulate,Estimated percentage who somewhat/strongly support regulating CO2 as a pollutant
+3,regulateOppose,Estimated percentage who somewhat/strongly oppose regulating CO2 as a pollutant
+3,CO2limits,Estimated percentage who somewhat/strongly support setting strict limits on existing coal-fire power plants
+3,CO2limitsOppose,Estimated percentage who somewhat/strongly oppose setting strict limits on existing coal-fire power plants
+3,reducetax,Estimated percentage who somewhat/strongly support requiring fossil fuel companies to pay a carbon tax and use the money to reduce other taxes (such as income tax) by an equal amount
+3,reducetaxOppose,Estimated percentage who somewhat/strongly oppose requiring fossil fuel companies to pay a carbon tax and use the money to reduce other taxes (such as income tax) by an equal amount
+3,supportRPS,Estimated percentage who somewhat/strongly support requiring utilities to produce 20% electricity from renewable sources
+3,supportRPSOppose,Estimated percentage who somewhat/strongly oppose requiring utilities to produce 20% electricity from renewable sources
+3,rebates,Estimated percentage who somewhat/strongly support providing tax rebates for people who purchase energy-efficient vehicles or solar panels
+3,rebatesOppose,Estimated percentage who somewhat/strongly oppose providing tax rebates for people who purchase energy-efficient vehicles or solar panels
+3,drillANWR,Estimated percentage who somewhat/strongly support drilling for oil in the Arctic National Wildlife Refuge
+3,drillANWROppose,Estimated percentage who somewhat/strongly oppose drilling for oil in the Arctic National Wildlife Refuge
+3,drilloffshore,Estimated percentage who somewhat/strongly support expanding offshore drilling for oil and natural gas off the U.S. coast
+3,drilloffshoreOppose,Estimated percentage who somewhat/strongly oppose expanding offshore drilling for oil and natural gas off the U.S. coast
+3,teachGW,"Estimated percentage who somewhat/strongly agree that schools should teach about the causes, consequences, and potential solutions to global warming"
+3,teachGWOppose,"Estimated percentage who somewhat/strongly disagree that schools should teach about the causes, consequences, and potential solutions to global warming"
+4,corporations,Estimated percentage who think corporations and industy should be doing more/much more to address global warming
+4,corporationsOppose,Estimated percentage who think corporations and industy should be doing less/much less to address global warming
+4,president,Estimated percentage who think the President themselves should be doing more/much more to address global warming
+4,presidentOppose,Estimated percentage who think the President themselves should be doing less/much less to address global warming
+4,congress,Estimated percentage who think Congress should be doing more/much more to address global warming
+4,congressOppose,Estimated percentage who think Congress should be doing less/much less to address global warming
+4,governor,Estimated percentage who think their governor should be doing more/much more to address global warming
+4,governorOppose,Estimated percentage who think their governor should be doing less/much less to address global warming
+4,localofficials,Estimated percentage who think their local officials should be doing more/much more to address global warming
+4,localofficialsOppose,Estimated percentage who think their local officials should be doing less/much less to address global warming
+4,citizens,Estimated percentage who think citizens themselves should be doing more/much more to address global warming
+4,citizensOppose,Estimated percentage who think citizens themselves should be doing less/much less to address global warming
+5,prienv,"Estimated percentage who think protecting the environment is more important than economic growth, even if it reduces economic growth"
+5,prienvOppose,"Estimated percentage who think economic growth is more important than protecting the environment, even if it leads to environmental problems"
+5,discuss,Estimated percentage who discuss global warming occassionally or often with friends and family
+5,discussOppose,Estimated percentage who discuss global warming rarely or never with friends and family
+5,mediaweekly,Estimated percentage who hear about global warming in the media at least weekly
+5,mediaweeklyOppose,Estimated percentage who hear about global warming in the media several times a year or less often
