@@ -106,10 +106,7 @@ print(p_ycom)
 Even rough inspection of the above maps by anyone familiar with American politics will likely confirm that adherence to the scientific consensus on climate depends largely on politics and demographics. Climate believers live along the coast or near the southern boarder. These are places in the U.S. with strong support for the democratic party and include diverse counties along the southern part of the country.
 
 ```{r mit_map,fig.width=10,fig.height=4}
-mit_county <- read_csv("../../data/format/mit_election_18.csv") %>% 
-  mutate(obama12_pct= 100 * obama12 / (romney12 + obama12 + otherpres12),
-         clinton16_pct= 100 * clinton16 / (trump16 + clinton16),
-         urban_pct = 100 - rural_pct)
+mit_county <- read_csv("../../data/format/mit_election_18.csv")]
 us_counties_mit <- us_counties %>% left_join(mit_county,by="fips")
 
 # p <- plotly::ggplotly(
