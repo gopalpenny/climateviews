@@ -81,11 +81,11 @@ perceptions_prep <- ycom_pca %>% left_join(demographics_pct,by="fips") %>%
   gather(PC,val,belief_PC1:policy_PC3) %>% 
   mutate(PC=paste0(PC,"r")) %>% na.omit()
 lm_results <- summary(lm(val~PC:clinton16 + PC:female + PC:black + PC:hispanic + PC:white,perceptions_prep))
-perceptions_resid <- perceptions_prep %>% bind_cols(residuals=lm_results$res) %>% select(-val) %>%
+perceptions_resid <- perceptions_prep %>% bind_cols(residuals=round(lm_results$res,4)) %>% select(-val) %>%
   spread(PC,residuals)
 
 perceptions_pca <- ycom_pca %>% left_join(perceptions_resid %>% select(fips,matches(".*PC[1-3]r$")),by="fips")
-write_csv(ycom_pca,"data/format/climate_perceptions_ycom_pca.csv")
+write_csv(perceptions_pca,"data/format/climate_perceptions_ycom_pca.csv")
 
 # p_WGI_PCA <- factoextra::fviz_pca_biplot(wgi_pca,geom="point",col.ind = "darkgray",col.var="darkred") +
 #   coord_equal()
