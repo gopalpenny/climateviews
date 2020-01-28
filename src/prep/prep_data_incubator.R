@@ -44,7 +44,7 @@ data <- us_counties_fips %>%
   left_join(exposure,by=c("FIPS","Name","State")) %>% 
   left_join(perceptions,by="fips") %>%
   left_join(demographics_pct,by="fips") %>%
-  select(-fips)
+  select(FIPS,fips,everything())
 
 write_csv(data,"results/output/incubator_data.csv")
 
