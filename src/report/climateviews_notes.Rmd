@@ -86,12 +86,12 @@ Perceptions of climate change vary across the united states, including considera
 
 ```{r ycom_map,fig.width=10,fig.height=4}
 us_counties <- sf::st_read("../../spatial/shp/us_counties/us_counties_laea.shp")
-ycom_county <- read_csv("../../data/orig/yale/YCOM_2019_Data.csv") %>% filter(GeoType=="County") %>% rename(fips=GEOID)
-us_counties_ycom <- us_counties %>% left_join(ycom_county,by="fips")
+data <- read_csv("../../results/output/incubator_data.csv")
+us_counties_data <- us_counties %>% left_join(data,by="fips")
 
 # p <- plotly::ggplotly(
 p_ycom <- ggplot() + 
-  geom_sf(data=us_counties_ycom %>% select(`Is climate change hapening?`=happening,`Is it caused by humans?`=human) %>% gather(variable,percent,-geometry),aes(fill=percent),color=NA) +
+  geom_sf(data=us_counties_data %>% select(`Is climate change hapening?`=happening,`Is it caused by humans?`=human) %>% gather(variable,percent,-geometry),aes(fill=percent),color=NA) +
   viridis::scale_fill_viridis("Percent of\npopulation") +
   facet_wrap(~variable,nrow=1) +
   labs(caption="Data: Yale Program on Climate Change Communication (climatecommunication.yale.edu)") +
@@ -106,23 +106,18 @@ print(p_ycom)
 Even rough inspection of the above maps by anyone familiar with American politics will likely confirm that adherence to the scientific consensus on climate depends largely on politics and demographics. Climate believers live along the coast or near the southern boarder. These are places in the U.S. with strong support for the democratic party and include diverse counties along the southern part of the country.
 
 ```{r mit_map,fig.width=10,fig.height=4}
-mit_county <- read_csv("../../data/format/mit_election_18.csv")]
-us_counties_mit <- us_counties %>% left_join(mit_county,by="fips")
-
-# p <- plotly::ggplotly(
 p_mit <- ggplot() + 
-  geom_sf(data=us_counties_mit %>% mutate() %>% 
-            select(`Hillary major-party vote share in 2016`=clinton16_pct,
-                   `Non-white population`=nonwhite_pct) %>% #,`Population in urban areas`=urban_pct) %>% 
+  geom_sf(data=us_counties_data %>% mutate() %>% 
+            select(`Hillary major-party vote share in 2016`=clinton16,
+                   `Non-white population`=nonwhite) %>% #,`Population in urban areas`=urban_pct) %>% 
             gather(variable,percent,-geometry),aes(fill=percent),color=NA) +
   scale_fill_gradient2("Percent of\nvotes or\npopulation",midpoint=50,limits=c(0,100)) +
   # viridis::scale_fill_viridis("Percent of\nvotes or\npopulation") +
   facet_wrap(~variable,nrow=1) +
   labs(caption="Data: MIT Election Data (electionlab.mit.edu/data)") +
   ggtitle(paste0("Demographics as election returns and urban-rural divide (",
-                 format(length(unique(mit_county$fips)),big.mark=",")," counties)")) +
+                 format(sum(!is.na(us_counties_data$clinton16)),big.mark=",")," counties)")) +
   theme(strip.text=element_text(size=11),plot.caption=element_text(size=10))
-  # )
 print(p_mit)
 ```
 
@@ -147,6 +142,58 @@ print(p_pairs)
 # p_pairs
 ```
 
+## Exposure to environmental hazards
+
+```{r drought_map,fig.width=10,fig.height=2.5}
+p_drought <- ggplot() + 
+  geom_sf(data=us_counties_data %>% mutate() %>% 
+            select(`D1: Moderate drought`=D1_pct_mean,
+                   `D2: Severe drought`=D2_pct_mean,
+                   `D3: Extreme drought`=D3_pct_mean,
+                   `D4: Exceptional drought`=D4_pct_mean) %>% #,`Population in urban areas`=urban_pct) %>% 
+            gather(variable,percent,-geometry),aes(fill=percent),color=NA) +
+  viridis::scale_fill_viridis("Percent\nof days\nin drought",option="magma") +
+  facet_wrap(~variable,nrow=1) +
+  labs(caption="Data: US Drought Monitor (droughtmonitor.unl.edu)") +
+  ggtitle(paste0("Percent time spent in drought, 2010-2019 (",
+                 format(sum(!is.na(us_counties_data$D1_pct_mean)),big.mark=",")," counties)")) +
+  theme(strip.text=element_text(size=11),plot.caption=element_text(size=10),
+        axis.text=element_blank(),axis.ticks = element_blank())
+print(p_drought)
+```
 
 
+```{r flood_map,echo=FALSE,fig.width=10,fig.height=4}
+p_flood <- ggplot() + 
+  geom_sf(data=us_counties_data %>% 
+            mutate(amount_2000s=log10(amount_2000s),
+                   amount_2010s=log10(amount_2010s)) %>% 
+            select(`Amount paid 2000-2009`=amount_2000s,
+                   `Amount paid 2010-2019`=amount_2010s) %>% #,`Population in urban areas`=urban_pct) %>% 
+            gather(variable,log10_amount,-geometry),aes(fill=log10_amount),color=NA) +
+  viridis::scale_fill_viridis("Total paid\n(log $)",option="cividis",limits=c(2,10),breaks=seq(3,9,by=3),labels=c("$1k","$1M","$1B")) +
+  facet_wrap(~variable,nrow=1) +
+  labs(caption="Data: National Flood Insurance Program (fema.gov/national-flood-insurance-program)") +
+  ggtitle(paste0("Flood claims paid by the National Flood Insurance Program (",
+                 format(sum(!is.na(us_counties_data$amount_2000s)),big.mark=",")," counties)")) +
+  theme(strip.text=element_text(size=11),plot.caption=element_text(size=10),
+        axis.text=element_blank(),axis.ticks = element_blank())
+print(p_flood)
+```
 
+
+```{r wildfire_map,echo=FALSE,fig.width=7,fig.height=4.5}
+p_wildfire <- ggplot() + 
+  geom_sf(data=us_counties_data %>% 
+            mutate(wildfire_risk=factor(wildfire_risk,levels=c("Low","Medium","High"))) %>%
+            select(`Wildfire risk`=wildfire_risk),
+          aes(fill=`Wildfire risk`),color=NA) +
+  scale_fill_manual("Risk level",values=c('#ffeda0','#feb24c','#f03b20')) +
+  # facet_wrap(~variable,nrow=1) +
+  labs(caption="Data: US Natural Hazards Index\n(ncdp.columbia.edu/library/mapsmapping-projects/us-natural-hazards-index/)") +
+  ggtitle(paste0("Wildfire risk from US Natural Hazards Index (",
+                 format(sum(!is.na(us_counties_data$wildfire_risk)),big.mark=",")," counties)")) +
+  theme(strip.text=element_text(size=11),plot.caption=element_text(size=10),
+        axis.text=element_blank(),axis.ticks = element_blank())
+print(p_wildfire)
+```
