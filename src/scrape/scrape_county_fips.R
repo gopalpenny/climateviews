@@ -12,4 +12,4 @@ us_fips_codes_format <- us_fips_codes %>%
   mutate(county_lower=gsub("[\\. ]","",tolower(Name)),
          county_lower=ifelse(State=="VA",gsub("city$","",county_lower),county_lower))
 
-write_csv(us_fips_codes,"data/format/usa_county_fips_codes.csv")
+write_csv(us_fips_codes_format,"data/format/usa_county_fips_codes.csv")
