@@ -39,8 +39,6 @@ Are you ready for climate change? Climate change is happening and it will produc
 
 ## Background
 
-## Data
-
 It's well documented that climate perceptions within the United States are influenced to a large degree by political ideology and party affiliation. For instance:
 
 * Full 2016 report from [PEW](https://www.pewresearch.org/science/2016/10/04/public-views-on-climate-change-and-climate-scientists/)
@@ -52,9 +50,13 @@ It's well documented that climate perceptions within the United States are influ
 * Climate perceptions vary across local scales in the US, according to a recent [paper in Nature Climate](https://www.nature.com/articles/nclimate2583) which published a large dataset on climate perceptions within the US.
 
 
-Datasets that I will use
+## Data
 
-* Download [YCOM](https://climatecommunication.yale.edu/visualizations-data/ycom-us/) -- Yale climate change perceptions database at the county level
+Datasets I will use (all at the US county level):
+
+* County-level FIPS codes scraped from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697) (<1 MB)
+* Climate perceptions [YCOM](https://climatecommunication.yale.edu/visualizations-data/ycom-us/) (2 MB)
+    + Yale climate change perceptions database at the county level
     + Survey questions (given to N = 12,061 participants) separated into categories:
         + Beliefs
         + Risk perceptions
@@ -63,13 +65,16 @@ Datasets that I will use
     + This database was compiled using multilevel regression + poststratification
     + Each individual represented by a logit model accounting for demographics
     + County-level poststratification was done using demographics, geography, and a couple of climate proxies such as 2008 Obama vote share, same-sex households, drivers who drive alone, and per capita carbon footprint
-* [Natural Hazards Index Map (Earth Institute at Columbia)](https://ncdp.columbia.edu/library/mapsmapping-projects/us-natural-hazards-index/)
-* FEMA natural disasters database, [1953-2020](https://www.fema.gov/openfema-dataset-disaster-declarations-summaries-v1) (or, [data through 2013](https://www.fema.gov/data-sets) contains FIPS)
-* Scrape county-level FIPS codes from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697)
-* Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this seems potentially unnecessary
-* [MIT elections data](https://electionlab.mit.edu/data), especially [this dataset from 2018](https://github.com/MEDSL/2018-elections-unoffical)
-* [US Drought Monitor](https://droughtmonitor.unl.edu/Data/DataDownload/ComprehensiveStatistics.aspx), and [API info](https://droughtmonitor.unl.edu/WebServiceInfo.aspx#comp)
-* [FEMA NFIP](https://www.fema.gov/media-library/assets/documents/180374)
+* Wildfire hazard level [Natural Hazards Index Map (Earth Institute at Columbia)](https://ncdp.columbia.edu/library/mapsmapping-projects/us-natural-hazards-index/) (<1 MB)
+* [MIT elections data](https://electionlab.mit.edu/data), especially [this dataset from 2018](https://github.com/MEDSL/2018-elections-unoffical) (1 MB)
+* [US Drought Monitor](https://droughtmonitor.unl.edu/Data/DataDownload/ComprehensiveStatistics.aspx), and [API info](https://droughtmonitor.unl.edu/WebServiceInfo.aspx#comp) (292 MB)
+* [FEMA NFIP](https://www.fema.gov/media-library/assets/documents/180374) (543 MB)
+* Severe and super severe disasters by county, 1930-2010 [Boustan et al](https://theconversation.com/new-data-set-explores-90-years-of-natural-disasters-in-the-us-78382)
+
+Not currently included:
+
+* Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this may be unnecessary
+* NOT USED: FEMA natural disasters database, [1953-2020](https://www.fema.gov/openfema-dataset-disaster-declarations-summaries-v1) (or, [data through 2013](https://www.fema.gov/data-sets) contains FIPS)
 
 Each of the datasets much be joined at the county level, which requires a minimal amount of cleaning and preparation (e.g., to remove unnecessary text in county ID fields). I will convert main dataset of climate perceptions (YCOM) to principle components, for each of the major subject areas of the survey.
 
