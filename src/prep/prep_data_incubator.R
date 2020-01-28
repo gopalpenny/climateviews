@@ -17,7 +17,7 @@ us_counties_fips <- read_csv("data/format/usa_county_fips_codes.csv") %>% select
 us_counties_sf <- sf::st_read("spatial/shp/us_counties/us_counties_laea.shp")
 
 # perceptions prep
-perceptions <- read_csv("data/format/climate_perceptions_ycom_pca.csv") %>% select(-GeoName,-GeoType)
+perceptions <- read_csv("data/format/climate_perceptions_ycom_pca_with_clusters.csv") #%>% select(-GeoName,-GeoType)
 
 # exposure prep
 drought <- read_csv("data/format/drought_usdm_2010s.csv") %>% select(-State,-County) #%>% mutate(fips=as.numeric(FIPS))
