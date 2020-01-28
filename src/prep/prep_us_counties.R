@@ -11,3 +11,12 @@ us_counties <- usmap::us_map(regions="counties") %>%
   summarize(do_union=FALSE) %>% sf::st_cast('LINESTRING') %>% sf::st_cast("POLYGON")
 
 sf::st_write(us_counties,"spatial/shp/us_counties/us_counties_laea.shp",delete_layer=TRUE)
+
+# states
+us_states <- usmap::us_map(regions="states") %>% 
+  sf::st_as_sf(coords=c("x","y"),crs=usmap::usmap_crs()) %>% 
+  mutate(fips=as.numeric(as.character(fips))) %>%
+  group_by(group,fips) %>%
+  summarize(do_union=FALSE) %>% sf::st_cast('LINESTRING') %>% sf::st_cast("POLYGON")
+
+sf::st_write(us_states,"spatial/shp/us_states/us_states_laea.shp",delete_layer=TRUE)
