@@ -66,12 +66,25 @@ get_PCs <- function(df,n_PC=Inf) {
   return(df_PCs)
 }
 
-ycom_pca <- ycom_county %>% select(FIPS=GEOID,County=GeoName,TotalPop) %>%
+ycom_pca <- ycom_county %>% select(FIPS=GEOID,County=GeoName,TotalPop) %>% rename(fips=FIPS) %>%
   bind_cols(beliefs_PCs %>% select(belief_PC1=PC1)) %>% 
   bind_cols(perceptions_PCs %>% select(perception_PC1=PC1)) %>% 
   bind_cols(policy_PCs %>% select(policy_PC1=PC1,policy_PC3=PC3))
 
+# Now that PCA is complete, remove demographic trends in the data
+demographics_pct <- read_csv("data/format/mit_election_18.csv") %>% 
+  select(fips,female_pct, age29andunder_pct, age65andolder_pct,
+         clinton16_pct,obama12_pct,white_pct, black_pct, hispanic_pct, nonwhite_pct, rural_pct) %>%
+  setNames(gsub("_pct$","",names(.)))
 
+perceptions_prep <- ycom_pca %>% left_join(demographics_pct,by="fips") %>%
+  gather(PC,val,belief_PC1:policy_PC3) %>% 
+  mutate(PC=paste0(PC,"r")) %>% na.omit()
+lm_results <- summary(lm(val~PC:clinton16 + PC:female + PC:black + PC:hispanic + PC:white,perceptions_prep))
+perceptions_resid <- perceptions_prep %>% bind_cols(residuals=lm_results$res) %>% select(-val) %>%
+  spread(PC,residuals)
+
+perceptions_pca <- ycom_pca %>% left_join(perceptions_resid %>% select(fips,matches(".*PC[1-3]r$")),by="fips")
 write_csv(ycom_pca,"data/format/climate_perceptions_ycom_pca.csv")
 
 # p_WGI_PCA <- factoextra::fviz_pca_biplot(wgi_pca,geom="point",col.ind = "darkgray",col.var="darkred") +
