@@ -8,4 +8,8 @@ us_fips_codes <- us_fips %>%
   rvest::html_node(xpath="//*[@id=\"detail\"]/table") %>%
   rvest::html_table()
 
+us_fips_codes_format <- us_fips_codes %>%
+  mutate(county_lower=gsub("[\\. ]","",tolower(Name)),
+         county_lower=ifelse(State=="VA",gsub("city$","",county_lower),county_lower))
+
 write_csv(us_fips_codes,"data/format/usa_county_fips_codes.csv")
