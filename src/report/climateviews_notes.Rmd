@@ -3,11 +3,43 @@ title: "Climate risk and perceptions"
 output: html_notebook
 ---
 
-```{r}
+```{r init,echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
 library(sf)
 library(tidyverse)
 library(viridis)
 ```
+
+## Data incubator application
+
+### Abstract
+
+*Please provide a general description and justification for your project. (Max 750 characters):*
+
+Are you ready for climate change? Climate change is happening and it will produce devastating consequences around the world. It will create many winners and many losers. Those who are most prepared are most likely to avoid falling into the latter category. How do you know if you're prepared? Creating an effective plan for climate change starts by understanding how you depend on your environment. How do your customers perceive climate change?
+
+### Problem / User:
+
+*Who is the end user for this project? What problem does it solve for them? Is the problem urgent and pervasive? Is someone willing to pay for a solution? (Max 750 characters)*
+
+### Feasibility
+
+*What are the minimum requirements for this project to provide value in solving the end user's problem? How much can be accomplished in 8 weeks? (Max 750 characters)*
+
+### Data Availability
+
+*What data would you ideally have for this project? What data can you reasonably access? How do you reconcile any differences between these sets of resources? (Max 750 characters)*
+
+### Competition
+
+*What, if any, solutions already exist for this problem? What additional value does your solution provide? (Max 750 characters)*
+
+### Impact
+
+*How do you plan to validate the success of this project beyond measuring model performance? For example, how if your model "improves accuracy by 10%", how would you contextualize the effect of this improvement to a non-technical stakeholder? (Max 750 characters)*
+
+## Background
+
+## Data
 
 It's well documented that climate perceptions within the United States are influenced to a large degree by political ideology and party affiliation. For instance:
 
@@ -31,6 +63,7 @@ Datasets that I will use
     + This database was compiled using multilevel regression + poststratification
     + Each individual represented by a logit model accounting for demographics
     + County-level poststratification was done using demographics, geography, and a couple of climate proxies such as 2008 Obama vote share, same-sex households, drivers who drive alone, and per capita carbon footprint
+* [Natural Hazards Index Map (Earth Institute at Columbia)](https://ncdp.columbia.edu/library/mapsmapping-projects/us-natural-hazards-index/)
 * FEMA natural disasters database, [1953-2020](https://www.fema.gov/openfema-dataset-disaster-declarations-summaries-v1) (or, [data through 2013](https://www.fema.gov/data-sets) contains FIPS)
 * Scrape county-level FIPS codes from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697)
 * Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this seems potentially unnecessary
@@ -40,18 +73,78 @@ Datasets that I will use
 
 Each of the datasets much be joined at the county level, which requires a minimal amount of cleaning and preparation (e.g., to remove unnecessary text in county ID fields). I will convert main dataset of climate perceptions (YCOM) to principle components, for each of the major subject areas of the survey.
 
-```{r map,fig.width=10}
+## Visualize the data
+
+### Perceptions of climate change across U.S. counties
+
+Perceptions of climate change vary across the united states, including considerable differences within states and among neighboring counties. There is a clear distinction in public opinion between the occurrence of climate change and the cause of climate. Importantly, this dataset was derived by researchers at Yale and George Mason from large survey of the entire U.S. (N = 12,061) combined with state- and county-level demographic data.
+
+```{r ycom_map,fig.width=10,fig.height=4}
 us_counties <- sf::st_read("../../spatial/shp/us_counties/us_counties_laea.shp")
-us_counties <- us_counties %>% left_join(ycom_county %>% rename(fips=GEOID),by="fips")
-  
+ycom_county <- read_csv("../../data/orig/yale/YCOM_2019_Data.csv") %>% filter(GeoType=="County") %>% rename(fips=GEOID)
+us_counties_ycom <- us_counties %>% left_join(ycom_county,by="fips")
 
 # p <- plotly::ggplotly(
-p <- ggplot() + 
-  geom_sf(data=us_counties,aes(fill=human),color=NA) +
+p_ycom <- ggplot() + 
+  geom_sf(data=us_counties_ycom %>% select(`Is climate change hapening?`=happening,`Is it caused by humans?`=human) %>% gather(variable,percent,-geometry),aes(fill=percent),color=NA) +
   viridis::scale_fill_viridis("Percent of\npopulation") +
-  ggtitle("Is climate change climate change caused by humans?")
+  facet_wrap(~variable,nrow=1) +
+  labs(caption="Data: Yale Program on Climate Change Communication (climatecommunication.yale.edu)") +
+  ggtitle("Perceptions of climate change across the United States (3,142 counties)") +
+  theme(strip.text=element_text(size=11),plot.caption=element_text(size=10))
   # )
-print(p)
+print(p_ycom)
 ```
+
+### Variations in partisan voting and racial diversity
+
+Even rough inspection of the above maps by anyone familiar with American politics will likely confirm that adherence to the scientific consensus on climate depends largely on politics and demographics. Climate believers live along the coast or near the southern boarder. These are places in the U.S. with strong support for the democratic party and include diverse counties along the southern part of the country.
+
+```{r mit_map,fig.width=10,fig.height=4}
+mit_county <- read_csv("../../data/format/mit_election_18.csv") %>% 
+  mutate(obama12_pct= 100 * obama12 / (romney12 + obama12 + otherpres12),
+         clinton16_pct= 100 * clinton16 / (trump16 + clinton16),
+         urban_pct = 100 - rural_pct)
+us_counties_mit <- us_counties %>% left_join(mit_county,by="fips")
+
+# p <- plotly::ggplotly(
+p_mit <- ggplot() + 
+  geom_sf(data=us_counties_mit %>% mutate() %>% 
+            select(`Hillary major-party vote share in 2016`=clinton16_pct,
+                   `Non-white population`=nonwhite_pct) %>% #,`Population in urban areas`=urban_pct) %>% 
+            gather(variable,percent,-geometry),aes(fill=percent),color=NA) +
+  scale_fill_gradient2("Percent of\nvotes or\npopulation",midpoint=50,limits=c(0,100)) +
+  # viridis::scale_fill_viridis("Percent of\nvotes or\npopulation") +
+  facet_wrap(~variable,nrow=1) +
+  labs(caption="Data: MIT Election Data (electionlab.mit.edu/data)") +
+  ggtitle(paste0("Demographics as election returns and urban-rural divide (",
+                 format(length(unique(mit_county$fips)),big.mark=",")," counties)")) +
+  theme(strip.text=element_text(size=11),plot.caption=element_text(size=10))
+  # )
+print(p_mit)
+```
+
+The observations described above are confirmed by paired plot of the raw data. Despite the differences between the first pair of maps, opinions regarding the occurrence of climate change (is it *happening*?) and cause of climate change (is it *human*-caused?) are highly correlated (R^2^ = 0.939^2^ = `r round(0.939^2,3)`). Perceptions of these questions are strongly correlated with partisan voting, particularly with support for Hillary Clinton in 2016 (R^2^ = `r round(0.868^2,3)` for *happening*, and `r round(0.845^2,3)` for *human*) and to some extent with non-white population percentage (R^2^ = `r round(0.543^2,3)` for *happening* and `r round(0.464^2,3)` for *human*).
+
+```{r pairplots,fig.width=6,fig.height=4,message=FALSE,echo=FALSE}
+county_data <- ycom_county %>% left_join(mit_county,by="fips")
+county_data_select <- county_data %>% select(happening,human,obama12_pct,clinton16_pct,nonwhite_pct)
+county_data_select_long <- county_data_select %>% 
+  gather(ycom_var,ycom_pct,happening,human) %>% 
+  gather(mit_var,mit_pct,obama12_pct:nonwhite_pct)
+
+p_pairs <- ggplot(county_data_select_long) + geom_point(aes(mit_pct,ycom_pct)) +
+  facet_grid(ycom_var~mit_var,switch = "both") +
+  labs(caption="Correlations among data.")
+  theme(strip.placement = "outside",
+        axis.title = element_blank(),
+        strip.text=element_text(size=11),
+        strip.background = element_rect(fill=NA,color=NA))
+print(p_pairs)
+# p_pairs <- GGally::ggpairs(county_data_select %>% na.omit())
+# p_pairs
+```
+
+
 
 
