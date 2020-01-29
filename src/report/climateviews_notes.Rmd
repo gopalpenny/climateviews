@@ -124,20 +124,20 @@ print(p_mit)
 The observations described above are confirmed by paired plot of the raw data. Despite the differences between the first pair of maps, opinions regarding the occurrence of climate change (is it *happening*?) and cause of climate change (is it *human*-caused?) are highly correlated (R^2^ = 0.939^2^ = `r round(0.939^2,3)`). Perceptions of these questions are strongly correlated with partisan voting, particularly with support for Hillary Clinton in 2016 (R^2^ = `r round(0.868^2,3)` for *happening*, and `r round(0.845^2,3)` for *human*) and to some extent with non-white population percentage (R^2^ = `r round(0.543^2,3)` for *happening* and `r round(0.464^2,3)` for *human*).
 
 ```{r pairplots,fig.width=6,fig.height=4,message=FALSE,echo=FALSE}
-county_data <- ycom_county %>% left_join(mit_county,by="fips")
-county_data_select <- county_data %>% select(happening,human,obama12_pct,clinton16_pct,nonwhite_pct)
-county_data_select_long <- county_data_select %>% 
-  gather(ycom_var,ycom_pct,happening,human) %>% 
-  gather(mit_var,mit_pct,obama12_pct:nonwhite_pct)
-
-p_pairs <- ggplot(county_data_select_long) + geom_point(aes(mit_pct,ycom_pct)) +
-  facet_grid(ycom_var~mit_var,switch = "both") +
-  labs(caption="Correlations among data.")
-  theme(strip.placement = "outside",
-        axis.title = element_blank(),
-        strip.text=element_text(size=11),
-        strip.background = element_rect(fill=NA,color=NA))
-print(p_pairs)
+# county_data <- ycom_county %>% left_join(mit_county,by="fips")
+# county_data_select <- county_data %>% select(happening,human,obama12_pct,clinton16_pct,nonwhite_pct)
+# county_data_select_long <- county_data_select %>% 
+#   gather(ycom_var,ycom_pct,happening,human) %>% 
+#   gather(mit_var,mit_pct,obama12_pct:nonwhite_pct)
+# 
+# p_pairs <- ggplot(county_data_select_long) + geom_point(aes(mit_pct,ycom_pct)) +
+#   facet_grid(ycom_var~mit_var,switch = "both") +
+#   labs(caption="Correlations among data.")
+#   theme(strip.placement = "outside",
+#         axis.title = element_blank(),
+#         strip.text=element_text(size=11),
+#         strip.background = element_rect(fill=NA,color=NA))
+# print(p_pairs)
 # p_pairs <- GGally::ggpairs(county_data_select %>% na.omit())
 # p_pairs
 ```
@@ -166,15 +166,19 @@ print(p_drought)
 ```{r flood_map,echo=FALSE,fig.width=10,fig.height=4}
 p_flood <- ggplot() + 
   geom_sf(data=us_counties_data %>% 
-            mutate(amount_2000s=log10(amount_2000s),
-                   amount_2010s=log10(amount_2010s)) %>% 
+            mutate(amount_2000s=log10(amount_2000s/TotalPop),
+                   amount_2010s=log10(amount_2010s/TotalPop)) %>%
+            mutate(amount_2000s=if_else(is.na(amount_2000s) | abs(amount_2000s) == Inf | amount_2000s < 0,0,amount_2000s),
+                   amount_2010s=if_else(is.na(amount_2010s) | abs(amount_2010s) == Inf | amount_2010s < 0,0,amount_2010s)) %>%
             select(`Amount paid 2000-2009`=amount_2000s,
                    `Amount paid 2010-2019`=amount_2010s) %>% #,`Population in urban areas`=urban_pct) %>% 
             gather(variable,log10_amount,-geometry),aes(fill=log10_amount),color=NA) +
-  viridis::scale_fill_viridis("Total paid\n(log $)",option="cividis",limits=c(2,10),breaks=seq(3,9,by=3),labels=c("$1k","$1M","$1B")) +
+  viridis::scale_fill_viridis("Total paid",
+                              option="cividis",begin=0.2,breaks=seq(0,4,by=2),labels=c("$1","$100","$10k"),
+                              direction=1) +
   facet_wrap(~variable,nrow=1) +
   labs(caption="Data: National Flood Insurance Program (fema.gov/national-flood-insurance-program)") +
-  ggtitle(paste0("Flood claims paid by the National Flood Insurance Program (",
+  ggtitle(paste0("Per capita flood claims paid by the National Flood Insurance Program (",
                  format(sum(!is.na(us_counties_data$amount_2000s)),big.mark=",")," counties)")) +
   theme(strip.text=element_text(size=11),plot.caption=element_text(size=10),
         axis.text=element_blank(),axis.ticks = element_blank())
