@@ -15,27 +15,37 @@ library(viridis)
 
 *Please provide a general description and justification for your project. (Max 750 characters):*
 
-Are you ready for climate change? Climate change is happening and it will produce devastating consequences around the world. It will create many winners and many losers. Those who are most prepared are most likely to avoid falling into the latter category. How do you know if you're prepared? Creating an effective plan for climate change starts by understanding how you depend on your environment. How do your customers perceive climate change?
+Climate change poses a grave threat to the planet and has become one of the biggest political and economic issues around the world. However, there is considerable uncertainty among Americans regarding climate change: 67% believe climate change is happening, barely half (53%) think it is caused by humans, and a tad more (57%) think it will harm the U.S. This is in stark contrast with other countries, of which 88% of people (the median country) believe climate change will harm their country. Addressing climate problems in the U.S. requires understanding the relationships between climate perceptions, exposure, and preparedness. I will explore these relationships and provide a web tool for explore these dimensions on an interactive map.
 
 ### Problem / User:
 
 *Who is the end user for this project? What problem does it solve for them? Is the problem urgent and pervasive? Is someone willing to pay for a solution? (Max 750 characters)*
 
+Climate change itself has become a massive industry, and the U.S. Government has earmarked billions of dollars for climate mitigation and preparedness. Knowing where the these funds will be most valuable is essential maximizing return on investment. My analysis and web tool will help corporations, policy makers, and politicians understand how politics, demographics, and exposure to natural hazards affect climate preparedness. It will also policy makers identify which areas are most vulnerable due to lack of climate awareness and increasing risk. And finally it will assist with market based research for corporate branding.
+
 ### Feasibility
 
 *What are the minimum requirements for this project to provide value in solving the end user's problem? How much can be accomplished in 8 weeks? (Max 750 characters)*
+
+The minimum requirements for this project are to (a) understand the data through analytical approaches to data science and (b) build a web application allowing users to explore the data and run simple analysis online. The web application will require backend programming using R shiny. I will do this by summarizing and combining multiple datasets on climate perceptions (across 4 major categories), hazard exposure (floods, drought, wildfire), demographics (race/ethnicity, education, income), politics (support for major party candidates), and climate change preparedness. The data aggregation is done. The basic tasks of analysis and interactive web appcan be accomplished in 8 weeks. Additional tasks will depend on time -- see "Impact" answer.
 
 ### Data Availability
 
 *What data would you ideally have for this project? What data can you reasonably access? How do you reconcile any differences between these sets of resources? (Max 750 characters)*
 
+The ideal dataset would include climate perceptions of a sample of the U.S. population, georeferenced and with demographic data, and surveyed over time to gauge temporal trends. Such data is not available. To overcome this issue, I have compiled a dataset of climate perceptions and climate hazards across all 3,242 U.S. counties from multiple sources. Perceptions at the county-level come from the Yale Program on Climate Change Communication, weekly drought from the U.S. Drought Monitor, flood insurance claims from FEMA, wildfire risk from the Natural Hazards Index Map, and demographic and political data from the American Communities Survey and MIT Elections.
+
 ### Competition
 
 *What, if any, solutions already exist for this problem? What additional value does your solution provide? (Max 750 characters)*
 
+The best available resource for climate perceptions come from the Yale Program on Climate Change Communication, which provides opinions on climate change across counties in the United States, but does not provide direct analysis nor combine with hazards or preparedness data. I was unable to locate a complete publicly available dataset containing multiple climate hazards. I have therefore had to piece together these datasets from various sources and merge them along with demographic data and a dataset on climate preparedness into a single tool for analysis and exploration.
+
 ### Impact
 
 *How do you plan to validate the success of this project beyond measuring model performance? For example, how if your model "improves accuracy by 10%", how would you contextualize the effect of this improvement to a non-technical stakeholder? (Max 750 characters)*
+
+Success of the project will be determined first and foremost by completion. Beyond that, success will be determined by the number of features available in the web app: (0) basic features including map of data, clickable counties to display count-level details, in addition to (1) a location search, (2) overall cluster analysis, (3) cluster analysis based on key features, (4) similarity search.
 
 ## Background
 
@@ -50,9 +60,9 @@ It's well documented that climate perceptions within the United States are influ
 * Climate perceptions vary across local scales in the US, according to a recent [paper in Nature Climate](https://www.nature.com/articles/nclimate2583) which published a large dataset on climate perceptions within the US.
 
 
-## Data
+## Data wrangled and combined
 
-Datasets I will use (all at the US county level):
+Datasets I have downloaded, cleaned, and joined at the US county level:
 
 * County-level FIPS codes scraped from [USDA](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/home/?cid=nrcs143_013697) (<1 MB)
 * Climate perceptions [YCOM](https://climatecommunication.yale.edu/visualizations-data/ycom-us/) (2 MB)
@@ -71,12 +81,12 @@ Datasets I will use (all at the US county level):
 * [FEMA NFIP](https://www.fema.gov/media-library/assets/documents/180374) (543 MB)
 * Severe and super severe disasters by county, 1930-2010 [Boustan et al](https://theconversation.com/new-data-set-explores-90-years-of-natural-disasters-in-the-us-78382)
 
-Not currently included:
+<!-- Not currently included: -->
 
-* Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this may be unnecessary
-* NOT USED: FEMA natural disasters database, [1953-2020](https://www.fema.gov/openfema-dataset-disaster-declarations-summaries-v1) (or, [data through 2013](https://www.fema.gov/data-sets) contains FIPS)
+<!-- * Potentially, the [American Communities Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/), but this may be unnecessary -->
+<!-- * NOT USED: FEMA natural disasters database, [1953-2020](https://www.fema.gov/openfema-dataset-disaster-declarations-summaries-v1) (or, [data through 2013](https://www.fema.gov/data-sets) contains FIPS) -->
 
-Each of the datasets much be joined at the county level, which requires a minimal amount of cleaning and preparation (e.g., to remove unnecessary text in county ID fields). I will convert main dataset of climate perceptions (YCOM) to principle components, for each of the major subject areas of the survey.
+<!-- Each of the datasets much be joined at the county level, which requires a minimal amount of cleaning and preparation (e.g., to remove unnecessary text in county ID fields). I will convert main dataset of climate perceptions (YCOM) to principle components, for each of the major subject areas of the survey. -->
 
 ## Visualize the data
 
@@ -84,7 +94,7 @@ Each of the datasets much be joined at the county level, which requires a minima
 
 Perceptions of climate change vary across the united states, including considerable differences within states and among neighboring counties. There is a clear distinction in public opinion between the occurrence of climate change and the cause of climate. Importantly, this dataset was derived by researchers at Yale and George Mason from large survey of the entire U.S. (N = 12,061) combined with state- and county-level demographic data.
 
-```{r ycom_map,fig.width=10,fig.height=4}
+```{r ycom_map,echo=FALSE,fig.width=10,fig.height=4}
 us_counties <- sf::st_read("../../spatial/shp/us_counties/us_counties_laea.shp")
 data <- read_csv("../../results/output/incubator_data.csv")
 us_counties_data <- us_counties %>% left_join(data,by="fips")
@@ -105,7 +115,7 @@ print(p_ycom)
 
 Even rough inspection of the above maps by anyone familiar with American politics will likely confirm that adherence to the scientific consensus on climate depends largely on politics and demographics. Climate believers live along the coast or near the southern boarder. These are places in the U.S. with strong support for the democratic party and include diverse counties along the southern part of the country.
 
-```{r mit_map,fig.width=10,fig.height=4}
+```{r mit_map,echo=FALSE,fig.width=10,fig.height=4}
 p_mit <- ggplot() + 
   geom_sf(data=us_counties_data %>% mutate() %>% 
             select(`Hillary major-party vote share in 2016`=clinton16,
@@ -123,7 +133,7 @@ print(p_mit)
 
 The observations described above are confirmed by paired plot of the raw data. Despite the differences between the first pair of maps, opinions regarding the occurrence of climate change (is it *happening*?) and cause of climate change (is it *human*-caused?) are highly correlated (R^2^ = 0.939^2^ = `r round(0.939^2,3)`). Perceptions of these questions are strongly correlated with partisan voting, particularly with support for Hillary Clinton in 2016 (R^2^ = `r round(0.868^2,3)` for *happening*, and `r round(0.845^2,3)` for *human*) and to some extent with non-white population percentage (R^2^ = `r round(0.543^2,3)` for *happening* and `r round(0.464^2,3)` for *human*).
 
-```{r pairplots,fig.width=6,fig.height=4,message=FALSE,echo=FALSE}
+```{r pairplots,echo=FALSE,fig.width=6,fig.height=4,message=FALSE,echo=FALSE}
 # county_data <- ycom_county %>% left_join(mit_county,by="fips")
 # county_data_select <- county_data %>% select(happening,human,obama12_pct,clinton16_pct,nonwhite_pct)
 # county_data_select_long <- county_data_select %>% 
@@ -144,7 +154,7 @@ The observations described above are confirmed by paired plot of the raw data. D
 
 ## Exposure to environmental hazards
 
-```{r drought_map,fig.width=10,fig.height=2.5}
+```{r drought_map,echo=FALSE,fig.width=10,fig.height=2.5}
 p_drought <- ggplot() + 
   geom_sf(data=us_counties_data %>% mutate() %>% 
             select(`D1: Moderate drought`=D1_pct_mean,
