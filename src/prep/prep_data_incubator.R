@@ -47,11 +47,3 @@ data <- us_counties_fips %>%
   select(FIPS,fips,everything())
 
 write_csv(data,"results/output/incubator_data.csv")
-
-# us_counties_ycom <- us_counties %>% left_join(perceptions_pca,by="fips")
-# 
-# ggplot() + geom_sf(data=us_counties_ycom,aes(fill=belief_PC1r),color=NA) +
-#   viridis::scale_fill_viridis()
-# ggplot() + geom_sf(data=us_counties_ycom,aes(fill=perception_PC1r),color=NA) +
-#   viridis::scale_fill_viridis()
-
